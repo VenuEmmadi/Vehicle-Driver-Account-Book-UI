@@ -1,0 +1,219 @@
+<div class="dashboard-container-wrap">
+  <div class="dashboard-container">
+    <div class="side-container-wrap">
+      <ul class="side-container" id="mydiv">
+        <li class="listMenuChild active">Driver</li>
+        <li class="listMenuChild" (click)="handelBooking()">Booking</li>
+        <li class="listMenuChild" (click)="handelVechile()">Vehicle</li>
+      </ul>
+    </div>
+    <div class="main-container-wrap">
+      <div class="main-container">
+        <div class="heading_wrap">
+          <div class="heading">Driver Data</div>
+          <div class="heading">
+            <button *ngIf="role === 'admin'"
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Add Driver
+            </button>
+          </div>
+        </div>
+        <table>
+          <tr>
+            <th>License_Number</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>VehicleType</th>
+
+            <!-- <th>Edit</th> -->
+            <th *ngIf="role === 'admin'">Delete</th>
+          </tr>
+          <tr *ngFor="let datas of DriversData; let i = index">
+            <td>{{ datas.licenseNumber }}</td>
+            <td>{{ datas.name }}</td>
+            <td>{{ datas.age }}</td>
+            <td>{{ datas.vehicleType }}</td>
+            <!-- <td class="edit" style="cursor: pointer;">
+              <mat-icon
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalupdate"
+              >
+                edit
+              </mat-icon>
+            </td> -->
+            <!--  (click)="updatevehicledata(datas) -->
+            <td *ngIf="role === 'admin'" (click)="deleteDriverdata(datas)" style="cursor: pointer;">
+              <mat-icon>delete</mat-icon>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="model_outer_contain">
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Driver</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="input-text">
+            <mat-form-field appearance="outline">
+              <mat-label>License Number</mat-label>
+              <input
+                matInput
+                placeholder="License Number"
+                type="text"
+                (keyup)="handelLicense_Number($event)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="input-text">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                placeholder="Name"
+                type="text"
+                (keyup)="handelName($event)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="input-text">
+            <mat-form-field appearance="outline">
+              <mat-label>Age</mat-label>
+              <input
+                matInput
+                placeholder="Age"
+                type="text"
+                (keyup)="handelAge($event)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="input-text">
+            <mat-form-field appearance="outline">
+              <mat-label>Vehicle Type</mat-label>
+              <input
+                matInput
+                placeholder="Vehicle Type"
+                type="text"
+                (keyup)="handelVehicleType($event)"
+              />
+            </mat-form-field>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="handelAddDriver()"
+          >
+            Add Driver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="model_outer_contain">
+  <div
+    class="modal fade"
+    id="exampleModalupdate"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Driver</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+            <div class="input-text">
+              <mat-form-field appearance="outline">
+                <mat-label>License Number</mat-label>
+                <input
+                  matInput
+                  placeholder="License Number"
+                  type="text"
+                  [(ngModel)]="License_Number"
+                />
+                <!-- (keyup)="handelLicense_NumberU($event)" -->
+              </mat-form-field>
+            </div>
+            <div class="input-text">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Name"
+                  type="text"
+                  [(ngModel)]="Name"
+                />
+              </mat-form-field>
+            </div>
+            <div class="input-text">
+              <mat-form-field appearance="outline">
+                <mat-label>Age</mat-label>
+                <input
+                  matInput
+                  placeholder="Age"
+                  type="text"
+                  [(ngModel)]="Age"
+                />
+              </mat-form-field>
+            </div>
+            <div class="input-text">
+              <mat-form-field appearance="outline">
+                <mat-label>Vehicle Type</mat-label>
+                <input
+                  matInput
+                  placeholder="Vehicle Type"
+                  type="text"
+                  [(ngModel)]="VehicleType"
+                />
+              </mat-form-field>
+            </div>
+  
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              (click)="handelUpdateDriver()"
+            >
+              Update Driver
+            </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
