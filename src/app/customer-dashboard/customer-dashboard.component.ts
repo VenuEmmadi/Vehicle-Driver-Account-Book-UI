@@ -59,7 +59,6 @@ export class CustomerDashboardComponent implements OnInit {
   ngOnInit() {
     this.getVehicleData();
     this.role = this.dataService.role;
-
   }
 
   handelRegistration_No(event: any) {
@@ -174,6 +173,10 @@ export class CustomerDashboardComponent implements OnInit {
   }
 
   handelUpdateVechice() {
+    if(typeof this.noOfSeatU !== 'number') {
+      alert('Please enter number for Number of Seats');
+      return;
+    }
     if (this.registrationNoU.length > 0 && this.modelNoU.length > 0 && this.noOfSeatU > 0 && this.vechicalTypeU.length > 0 && this.acAvlU.length > 0) {
       this.dataService.handelUpdateVechice(this.registrationNoU, this.modelNoU, this.noOfSeatU, this.vechicalTypeU, this.acAvlU).subscribe((data) => {
 
@@ -207,7 +210,10 @@ export class CustomerDashboardComponent implements OnInit {
     this.acAvlU = datas.acAvailable
   }
   filterVehicles(){
-    this.dataSource.filter = this.filterString.trim().toLowerCase();
+    this.vehiclesData = this.res.vehicles.filter((veh: any) => {
+      const _str = this.filterString.trim().toLowerCase();
+      return Object.values(veh).some((val: any) => val.toString().toLowerCase().indexOf(_str) >= 0);
+    });
   }
 
 }

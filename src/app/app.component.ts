@@ -12,11 +12,6 @@ export class AppComponent {
   ngOnInit(){
         if(this.token !== ""){
             this.showHeder=true;
-        }
-        
-    
+        } 
   }
-
-
-
 }

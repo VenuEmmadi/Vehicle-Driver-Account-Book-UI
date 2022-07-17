@@ -46,7 +46,7 @@ export class DriverComponent implements OnInit {
   VehicleTypeU: any;
   AddressU: any;
   role: string = '';
-
+  filterString: any;
 
   constructor(private dataService: DataService, private router: Router) {
 
@@ -162,7 +162,7 @@ export class DriverComponent implements OnInit {
 
 
   handelUpdateDriver() {
-    if (this.License_NumberU.length > 0 && this.NameU.length > 0 && this.AgeU.length > 0 && this.VehicleTypeU.length > 0) {
+    if (this.License_NumberU.length > 0 && this.NameU.length > 0 && this.AgeU > 0 && this.VehicleTypeU.length > 0) {
       this.dataService
         .handelUpdateDriver(this.License_NumberU, this.NameU, this.AgeU, this.VehicleTypeU)
         .subscribe((data) => {
@@ -213,5 +213,11 @@ export class DriverComponent implements OnInit {
   //   this.AgeU = datas.age;
   //   this.VehicleTypeU = datas.vehicleType;
   // }
+  filterDrivers(){
+    this.DriversData = this.res.drivers.filter((veh: any) => {
+      const _str = this.filterString.trim().toLowerCase();
+      return Object.values(veh).some((val: any) => val && val.toString().toLowerCase().indexOf(_str) >= 0);
+  });
+}
 
 }

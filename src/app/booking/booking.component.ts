@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataService } from '../service/data.service';
 // import {MatDialog, MatDialogRef} from '@angular/material/dialog';
@@ -50,6 +51,20 @@ export class BookingComponent implements OnInit {
   DistanceU: any;
 
   role: string = '';
+  filterString: any;
+  bookingTypes: Array<string> = ['pickup', 'drop', 'round', 'tour'];
+  bokingType: string = '';
+  bookingStartDate: any;
+  bookingEndDate: any;
+  campaignOne = new FormGroup({
+    start: new FormControl(new Date()),
+    end: new FormControl(new Date(2022, 7, 16)),
+  });
+  FromLocationU: any;
+  ToLocationU: any;
+  FuelExpenseU: any;
+  DriverShareU: any;
+  RemarksU: any;
   constructor(private dataService: DataService, private router: Router) {
   }
 
@@ -101,7 +116,7 @@ export class BookingComponent implements OnInit {
 
   handelUpdateVechice() {
 
-    if (this.registrationNoU.length > 0 && this.modelNoU.length > 0 && this.noOfSeatU.length > 0 && this.vechicalTypeU.length > 0 && this.acAvlU.length > 0) {
+    if (this.registrationNoU.length > 0 && this.modelNoU.length > 0 && this.noOfSeatU > 0 && this.vechicalTypeU.length > 0 && this.acAvlU.length > 0) {
       this.dataService.handelUpdateVechice(this.registrationNoU, this.modelNoU, this.noOfSeatU, this.vechicalTypeU, this.acAvlU).subscribe((data) => {
         // const resSTR = JSON.stringify(res);
         // const resJSON = JSON.parse(resSTR);
@@ -148,9 +163,20 @@ export class BookingComponent implements OnInit {
 
   handelAddBooking() {
 
-    if (this.BookingID.length > 0 && this.Vehicle.length > 0 && this.Driver.length > 0 && this.TriFare.length > 0 && this.Distance.length > 0) {
+    if (this.Vehicle.length > 0 && this.Driver.length > 0 && this.TriFareU > 0 && this.DistanceU > 0) {
       this.dataService
-        .handelAddBooking(this.BookingID, this.Vehicle, this.Driver, this.TriFare, this.Distance)
+        .handelAddBooking({
+          "fromLocation": this.FromLocationU,
+          "toLocation": this.ToLocationU,
+          "distance": this.DistanceU,
+          "type": this.bokingType,
+          "fuelExpense": this.FuelExpenseU,
+          "driverShare": this.DriverShareU,
+          "remarks": this.RemarksU,
+          vehicle: this.Vehicle,
+          driver: this.Driver,
+          tripFare: parseInt(this.TriFareU),
+        })
         .subscribe((data) => {
 
           console.log("data", data)
@@ -199,7 +225,7 @@ export class BookingComponent implements OnInit {
     this.dataService
       .deleteBookingData(data.bookingID)
       .subscribe((data) => {
-        alert('subscribe called');
+        //alert('subscribe called');
         console.log("data vec", data)
         this.res = data;
         if (this.res.isSuccess == true) {
@@ -207,7 +233,7 @@ export class BookingComponent implements OnInit {
           //alert('data delete sucess');
         } else {
 
-          alert('data not delete ');
+          alert('data not deleted');
         }
 
       })
@@ -232,9 +258,18 @@ export class BookingComponent implements OnInit {
 
   handelUpdateBooking() {
 
-    if (this.BookingIDU.length > 0 && this.VehicleU.length > 0 && this.DriverU.length > 0 && this.TriFareU.length > 0 && this.DistanceU.length > 0) {
+    if (this.BookingIDU > 0 && this.VehicleU.length > 0 && this.DriverU.length > 0 && this.TriFareU > 0 && this.DistanceU > 0) {
       this.dataService.
-        handelUpdateBooking(this.BookingIDU, this.VehicleU, this.DriverU, this.TriFareU, this.DistanceU)
+        handelUpdateBooking(this.BookingIDU, this.VehicleU, this.DriverU, this.TriFareU, this.DistanceU, {
+          "fromLocation": this.FromLocationU,
+          "toLocation": this.ToLocationU,
+          "distance": this.DistanceU,
+          "type": this.bokingType,
+          "tripFare": this.TriFareU,
+          "fuelExpense": this.FuelExpenseU,
+          "driverShare": this.DriverShareU,
+          "remarks": this.RemarksU
+        })
         .subscribe((data) => {
 
           console.log("data", data)
@@ -258,10 +293,22 @@ export class BookingComponent implements OnInit {
 
   }
   updatebookingdata(datas: any) {
-    this.BookingIDU = datas.BookingIDU;
-    this.VehicleU = datas.VehicleU;
-    this.DriverU = datas.DriverU;
-    this.TriFareU = datas.TriFareU;
-    this.DistanceU = datas.DistanceU
+    this.BookingIDU = datas.bookingID;
+    this.VehicleU = datas.vehicle;
+    this.DriverU = datas.driver;
+    this.FromLocationU = datas.fromLocation
+    this.ToLocationU = datas.toLocation
+    this.TriFareU = datas.tripFare;
+    this.DistanceU = datas.distance;
+    this.bokingType = datas.type;
+    this.FuelExpenseU = datas.fuelExpense;
+    this.DriverShareU= datas.driverShare;
+    this.RemarksU = datas.remarks;
+  }
+  filterBooking(){
+    this.bookingsData = this.res.bookings.filter((veh: any) => {
+      const _str = this.filterString.trim().toLowerCase();
+      return Object.values(veh).some((val: any) => val && val.toString().toLowerCase().indexOf(_str) >= 0);
+    });
   }
 }

@@ -221,14 +221,9 @@ export class DataService {
 		return this.httpClient.delete(environment.stage.API_B_URL + 'api/Booking/DeleteBooking?bookingID=' + regno, options);
 	}
 
-	handelAddBooking(BookingID: any, Vehicle: any, Driver: any, TriFare: any, Distance: any) {
+	handelAddBooking(fields: any = {}) {
 		const input = JSON.stringify({
-			bookingID: parseInt(BookingID),
-			vehicle: Vehicle,
-			driver: Driver,
-			tripFare: parseInt(TriFare),
-			distance: parseInt(Distance)
-
+			...fields
 		});
 		const httpHeaders = new HttpHeaders({
 			'content-type': 'application/json',
@@ -242,14 +237,14 @@ export class DataService {
 		return this.httpClient.post(environment.stage.API_B_URL + 'api/Booking/AddBooking', input, options);
 	}
 
-	handelUpdateBooking(BookingID: any, Vehicle: any, Driver: any, TriFare: any, Distance: any) {
+	handelUpdateBooking(BookingID: any, Vehicle: any, Driver: any, TriFare: any, Distance: any, fields: any = {}) {
 		const input = JSON.stringify({
 			bookingID: parseInt(BookingID),
 			vehicle: Vehicle,
 			driver: Driver,
 			tripFare: parseInt(TriFare),
-			distance: parseInt(Distance)
-
+			distance: parseInt(Distance),
+			...fields
 		});
 		const httpHeaders = new HttpHeaders({
 			'content-type': 'application/json',
